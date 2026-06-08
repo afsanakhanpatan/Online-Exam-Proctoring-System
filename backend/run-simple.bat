@@ -1,0 +1,3 @@
+@echo off
+echo Starting backend with in-memory database...
+java -Dspring.datasource.url=jdbc:h2:mem:testdb -Dspring.jpa.hibernate.ddl-auto=create-drop -jar target/exam-proctoring-backend-1.0.0.jar
