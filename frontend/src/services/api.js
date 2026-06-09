@@ -10,8 +10,8 @@ const api = axios.create({
 });
 
 export const authAPI = {
-  login: (credentials) => api.post('/exams/auth/login', credentials),
-  register: (userData) => api.post('/exams/auth/register', userData),
+  login: (credentials) => api.post('/auth/login', credentials),
+  register: (userData) => api.post('/auth/register', userData),
 };
 
 export const examAPI = {
