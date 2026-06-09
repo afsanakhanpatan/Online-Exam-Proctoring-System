@@ -1,9 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Serve React frontend static files
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
 // Mock data
 let users = [
@@ -42,7 +46,8 @@ app.post('/api/auth/login', (req, res) => {
     if (user) {
         res.json({
             token: 'mock-jwt-token-' + user.id,
-            user: { id: user.id, username: user.username, role: user.role }
+            role: user.role,
+            username: user.username
         });
     } else {
         res.status(401).json({ message: 'Invalid credentials' });
@@ -50,16 +55,20 @@ app.post('/api/auth/login', (req, res) => {
 });
 
 app.post('/api/auth/register', (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
     const newUser = {
         id: users.length + 1,
         username,
         email,
         password,
-        role: 'STUDENT'
+        role: role || 'STUDENT'
     };
     users.push(newUser);
-    res.json({ message: 'User registered successfully' });
+    res.json({
+        token: 'mock-jwt-token-' + newUser.id,
+        role: newUser.role,
+        username: newUser.username
+    });
 });
 
 // Exam endpoints
@@ -146,7 +155,12 @@ app.post('/api/ai/analyze-image', (req, res) => {
     });
 });
 
-const PORT = 8081;
+// Catch-all: serve React app for any non-API route
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
+});
+
+const PORT = process.env.PORT || 8085;
 app.listen(PORT, () => {
     console.log(`Mock backend server running on http://localhost:${PORT}`);
     console.log('Available endpoints:');

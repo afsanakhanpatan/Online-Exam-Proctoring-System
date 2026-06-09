@@ -1,0 +1,13 @@
+{
+  "name": "online-exam-proctoring-system",
+  "version": "1.0.0",
+  "description": "Online Exam Management and Proctoring System",
+  "scripts": {
+    "install": "cd frontend && npm install && cd ../backend && npm install",
+    "build": "cd frontend && npm run build",
+    "start": "node backend/mock-server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
